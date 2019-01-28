@@ -1,0 +1,122 @@
+@CHARSET "UTF-8";
+ v\:*{behavior:url(#default#VML);}
+ @media Print { .noprint{ display:none; }}
+ 
+body
+{
+    font-family: "宋体";font-size: 10pt;margin:0px;
+}
+.Prtable
+{
+        width: 100%;
+        margin-bottom:0px; 
+        border:1px solid black;
+        background: #FFFFFF;   
+        padding-bottom:0px; 
+        border-collapse:collapse;
+        font-family: "宋体";font-size: 10pt;
+}
+
+.Prtable td,.Prtable th
+{    
+     height:20px;    
+     border-bottom:1px solid #333;
+     border-right:1px solid #333;
+     vertical-align:middle;  
+}
+.Prtable td table
+{
+       border:0px;
+ }
+ .Prtable td table td
+ {
+    border-bottom:0px;
+    
+  }
+.tbnocss td
+{
+   border-right:0px;   
+ }
+
+.imgtable
+{
+         background-position:center;
+         width: 100%;
+         margin-bottom:0px; 
+         padding-bottom:0px;
+         
+    }
+    
+.img_ttit
+{
+    width:100%;
+    margin:0 auto;
+}
+
+.img_ttit p
+{
+    text-align:center;
+}
+
+.titleImg
+{
+ margin:0 auto   
+}
+
+.jtyc
+{
+    width:100%;
+    border-left:0px solid #000;
+    border-top:0px solid #000;
+}
+
+.jtyc td
+{
+    border-right:0px solid #000;
+    border-bottom:0px solid #000;    
+}
+    
+/*报表名称*/
+.title 
+{
+     text-align:center;
+     font-family: "黑体";font-size: 16pt;font-weight:bold;
+}
+/*公司图标*/
+
+
+ .fixed{ position: absolute;bottom: auto; clear: both;
+       top:expression(eval(document.compatMode &&
+            document.compatMode=='CSS1Compat') ?
+            documentElement.scrollTop
+            +(this.clientHeight-35)
+            : document.body.scrollTop
+            +(this.clientHeight-35));
+        left:1px;     }
+        
+#PrintToolBar{ width:100%;position:relative;height: 35px;margin-top: 0px;background: transparent url(ToolImage/ToolBarBg.gif) left top repeat-x;padding: 0px 0px 0px 0px;z-index:2;}
+#PrintToolBar a{ display:block;float: left;color: #333;height: 25px; margin-top: 6px;margin-left:1px; margin-right:1px;padding-top: 7px;border: 0px solid #000;text-decoration:none;}
+#PrintToolBar a img{ margin: -3px 5px 0px 0px; border:0px;}
+#PrintToolBar .sealed_outter:link,
+#PrintToolBar .sealed_outter:visited,
+#PrintToolBar .sealed_outter:hover{ padding:0; float:left;}
+#PrintToolBar .sealed_outter:hover{display:block;height: 25px;background: transparent url(ToolImage/middle.gif); }
+#PrintToolBar .sealed_outter:hover .sealed{float:left;display:block;height: 25px;background: transparent url(ToolImage/left.gif) no-repeat 0 0 ;}
+#PrintToolBar .sealed_outter:hover .sealed_inner{background: transparent url(ToolImage/right.gif) right no-repeat;}
+#PrintToolBar .sealed_outter:link .sealed_inner,
+#PrintToolBar .sealed_outter:visited .sealed_inner,
+#PrintToolBar .sealed_outter:hover .sealed_inner{float:left;padding: 5px; height: 15px;}
+#PrintToolBar .PrintSplitRule, #PrintToolBar .PrintSplitRule:hover{height: 14px; width: 2px;margin: 12px 8px;
+margin-left:3px;margin-right:3px;padding: 0px; background: transparent url(ToolImage/t_01.gif) left top no-repeat;cursor:default;}
+.selectFontAllBackImage{display:block;height:25px;width: 18px;margin-top: 6px;margin-right:2px;padding-top:0px;background: transparent url(ToolImage/Small.gif) left top no-repeat}
+.ydd
+{
+    position:relative;
+}
+
+.us_gz
+{
+    position:absolute;
+    right:80px;
+    bottom:0px;
+}
