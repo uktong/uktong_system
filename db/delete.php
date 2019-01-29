@@ -24,6 +24,7 @@ switch ($_GET["action"]){
             die('{ "statusCode":"300", "message":"删除失败！您无权删除该订单", "navTabId":"", "rel":"", "callbackType":"", "forwardUrl":"", "confirmMsg":"" }');
         }else{
             $db->del("t_reserveplan","groupNumber='".$arrayresult["teamNumber"]."'");
+            $db->del("t_otherplan","groupNumber='".$arrayresult["teamNumber"]."'");
             $db->del("t_groupmanage", "id='".$id."'");
             die('{ "statusCode":"200", "message":"删除成功！", "navTabId":"", "rel":"", "callbackType":"", "forwardUrl":"", "confirmMsg":"" }');
             

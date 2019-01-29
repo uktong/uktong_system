@@ -188,7 +188,7 @@ function checkzts(){
 						
 						$alljine=0.00;
 						$alltuank=0.00;
-						
+						$allamount=0;
 						for ($a=0;$a<count($plans);$a++){?>
 							<tr class="unitBox"><td>
 							<input type="hidden" name="items<?php echo $a;?>.id" value="<?php echo $plans[$a]["id"];?>">
@@ -226,7 +226,7 @@ function checkzts(){
 	
 	</select></div></div></td><td><input type="text" name="items<?php echo $a;?>.customer" value="<?php echo $plans[$a]["guestName"];?>" class="required textInput customer"></td><td><a href="javascript:void(0)" class="btnDel ">删除</a></td></tr>
 	<?php 
-				
+	$allamount++;
 	$alljine+=$plans[$a]['hotelCommissionSum'];
 	$alltuank+=$plans[$a]['sumPrice'];
 				
@@ -240,7 +240,7 @@ function checkzts(){
 								<td ></td>
 								<td ></td>
 								<td ></td>
-								<td ></td>
+								<td class="allamount"><?php echo $allamount;?></td>
 								<td class="allprice"><?php echo $alljine;?></td>
 								<td ></td>
 								<td class="allsaleprice"><?php echo $alltuank;?></td>
@@ -329,7 +329,7 @@ function checkzts(){
 $(function(){
 
 	$(".getcus").change(function(){
-		$(".customer").val($("#krxx").val());
+		$(this).parent().parent().parent().parent().parent().parent().find(".customer").val($(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#krxx").val());
 		
 		});
 	$(".count").change(function(){
@@ -343,6 +343,7 @@ $(function(){
 	parent.find(".tatalsaleprice").text(thissaleprice*thisdays*thisamount);
 	var allprice=0;
 	var allsaleprice=0;
+	var allamount=0;
 	parent.parent().parent().find('.tatalprice').each(function (){
 
 		allprice+=parseFloat($(this).text());
@@ -355,11 +356,19 @@ $(function(){
 
 		});
 	parent.parent().parent().find('.allsaleprice').text(allsaleprice);
+
+	parent.parent().parent().find('.amount').each(function (){
+
+		allamount+=parseFloat($(this).val());
+
+		});
+	parent.parent().parent().find('.allamount').text(allamount);
+
 		});
 
 	//
 	$(".getothercus").change(function(){
-		$(".planremark").val($("#krxx").val());
+		$(this).parent().parent().parent().parent().parent().parent().find(".planremark").val($(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#krxx").val());
 		
 		});
 	$(".countother").change(function(){

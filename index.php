@@ -116,7 +116,16 @@ p{
 .pageFormContent  .customer,.pageFormContent .planremark{
 	width:90%;
 }
-
+.tfoot{
+	height:30px;
+}
+.tfoot th{
+	border:1px solid #cccccc;
+	font-weight:900;
+}
+.cwsearch{
+	margin:auto;
+}
 </style>
 <script src="js/dwz.regional.zh.js" type="text/javascript"></script>
 <script type="text/javascript">

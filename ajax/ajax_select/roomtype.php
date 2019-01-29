@@ -8,7 +8,7 @@ require R.'hzb/inc/load.php';
 $(function(){
 
 	$(".getcus").change(function(){
-		$(".customer").val($("#krxx").val());
+		$(this).parent().parent().parent().parent().parent().parent().find(".customer").val($(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#krxx").val());
 		
 		});
 	$(".count").change(function(){
@@ -22,6 +22,7 @@ $(function(){
 	parent.find(".tatalsaleprice").text(thissaleprice*thisdays*thisamount);
 	var allprice=0;
 	var allsaleprice=0;
+	var allamount=0;
 	parent.parent().parent().find('.tatalprice').each(function (){
 
 		allprice+=parseFloat($(this).text());
@@ -34,7 +35,16 @@ $(function(){
 
 		});
 	parent.parent().parent().find('.allsaleprice').text(allsaleprice);
+
+	parent.parent().parent().find('.amount').each(function (){
+
+		allamount+=parseFloat($(this).val());
+
 		});
+	parent.parent().parent().find('.allamount').text(allamount);
+	
+		});
+	
 
 	
 });

@@ -1,65 +1,28 @@
 <?php
-session_start();
-require_once $_SESSION["ROOT"].'/other/check.php';
-if(@$_POST["numPerPage"]!=null){
+//base start
+require "../hzb/config.php";
+require R.'hzb/inc/load.php';
+//base end
+
+//getpageJur
+
+$jur=$base->getJur(md5($_COOKIE["username"]),"name",$_GET["J"]);
+$usermsg=$base->data(md5($_COOKIE["username"]))[0];
+
+if(isset($_POST["numPerPage"])){
     $numPerPage=$_POST["numPerPage"];
-    //      $keywords=$_POST["keywords"];
     $pageNum=$_POST["pageNum"];
-    //     $status=$_POST["status"];
-    //     $orderField=$_POST["orderField"];
-    
-}else{
-    $numPerPage=20;
-    $pageNum=1;
-}
-
-require_once $_SESSION["ROOT"].'/db/db.php';
-date_default_timezone_set('prc');
-$firstday = date("Y-m-01");
-$lastday = date("Y-m-d",strtotime("$firstday +1 month -1 day"));
-
-$action=@$_GET["action"];
-switch ($action){
-    case "chaxun":
-        chaxun();
-        break;
-    case "charu":
-        charu();
-        break;
-    case "delete":
-        shanchu();
-        break;
-    case "edit":
-        edit();
-        break;
-}
-function charu(){
-
-    
-    mysqli_close($con);
-}
-function edit(){
-
-}
-function shanchu(){
-    require $_SESSION["ROOT"].'/db/db.php';
-    $id=$_GET["id"];
-    mysqli_query($con, "delete from t_sktravel where id=".$id);
 }
 ?>
-<script type="text/javascript" src="ajax/js/main.js"></script>
 
-<form id="pagerForm" method="post" action="cwgl/adwsk.php">
-<!-- 	<input type="hidden" name="status" value="${param.status}"> -->
-<!-- 	<input type="hidden" name="keywords" value="${param.keywords}" /> -->
-	<input type="hidden" name="pageNum" value="1" />
-	<input type="hidden" name="numPerPage" value="<?php echo $numPerPage;?>" />
-<!-- 	<input type="hidden" name="orderField" value="${param.orderField}" /> -->
-</form>
-
+<script type="text/javascript" src="ajax/js/main.js">
+</script>
 
 <div class="pageHeader">
-		<form onsubmit="return navTabSearch(this);" id="jdyfcxform" action="cwgl/adwsk.php" method="post" >
+		<form onsubmit="return navTabSearch(this);" id="pagerForm" action="<?php echo $jur["url"]."?J=".$_GET["J"]; ?>" method="post" >
+			<input type="hidden" name="pageNum" value="1" />
+	<input type="hidden" name="numPerPage" value="<?php echo $numPerPage;?>" />
+	<input name="search"  type="hidden" size="30" value="yes"/>
 	<div class="searchBar">
 	
 		<table class="searchContent">
@@ -71,18 +34,16 @@ function shanchu(){
 					<input name="startDate" class="date readonly" readonly="readonly" type="text" value="<?php
 					echo  isset($_POST["startDate"])?$_POST["startDate"]:$firstday;?>">
 					<span class="limit">-</span>
-					<input name="endDate" class="date readonly" readonly="readonly" type="text" value=" <?php echo isset($_POST["endDate"])?$_POST["endDate"]:$lastday;?>">
+					<input name="endDate" class="date readonly" readonly="readonly" type="text" value="<?php echo isset($_POST["endDate"])?$_POST["endDate"]:$lastday;?>">
 				</td>
 				<td >
 					组团社:
-					<input type="hidden" name="zts.id" value="<?php echo @$_POST["zts_id"];?>"/>
-				<input type="text" class="getzts" name="zts.zts" value="<?php echo @$_POST["zts_zts"];?>" readonly style="width:100px; " suggestFields="zts"  lookupGroup="zts" />
-				<a class="btnLook" href="ajax/dh/zts.php"style="float:right;margin-right:100px;"  lookupGroup="zts">选择用户</a>
+<?php require R.'temp/search/zts.php';?>
 				
 				</td>
 				<td >
 					收款人:
-				<input type="text" name="dopeople" style="width:100px;" value="<?php echo @$_POST["dopeople"];?>"/>
+<?php require R.'temp/search/user.php';?>
 				</td>
 <!-- 				<td > -->
 <!-- 					酒店: -->
@@ -106,21 +67,19 @@ function shanchu(){
 					<input name="remark"  type="text" size="30" style="width:150px;" value="<?php echo @$_POST["remark"];?>" />
 				</td>
 			
-				<td><button type="submit">搜索</button></td>
+				<td><div class="buttonActive"><div class="buttonContent"><button type="submit">搜索</button></div></div></td>
 			</tr>
 		</table>
-		<input name="search"  type="hidden" size="30" value="yes"/>
-		<input name="searchtype"  type="hidden" size="30" value="jdyfcx"/>
 	</div>
 	</form>
 </div>
 <div class="pageContent">
 	<div class="panelBar">
 		<ul class="toolBar">
-			<li><a class="add" href="cwgl/addadwsk.php" target="dialog" max="true" mask="true" rel="addadwsk"><span>添加</span></a></li>
+			<li><a class="add" href="cwgl/addadwsk.php<?php echo "?J=".$_GET["J"];?>" target="dialog" max="true" mask="true" rel="addadwsk"><span>添加</span></a></li>
 		</ul>
-	</div><script src="ajax/gsxx/gsxx.js"></script>
-	<table class="table" width="100%" layoutH="138" style="word-break:break-all; word-wrap:break-all;">
+</div>
+	<table class="table" width="100%" layoutH="158" style="word-break:break-all; word-wrap:break-all;">
 		<thead>
 			<tr>
 				<th align="center">序号</th>
@@ -140,79 +99,82 @@ function shanchu(){
 		</thead>
 		<tbody id="datacontent" >
 			<?php 
-			$xje=0;
-			$xzje=0;
-			$xye=0;
-			$zje=0;
-			$zzje=0;
-			$zye=0;
-			if(@$_POST["search"]==null){
-			    $result=mysqli_query($con,"select * from t_sktravel where travel is not null and dodate between '".$firstday."' and '".$lastday."' ");
-			    $resultarray=mysqli_fetch_all($result,MYSQLI_ASSOC);
-			    for($z=0;$z<count($resultarray);$z++){
-			        $zje+=$resultarray[$z]['money'];
-			        $zzje+=$resultarray[$z]['money']-$resultarray[$z]['mhaving'];
-			        $zye+=$resultarray[$z]['mhaving'];
-			    }
-			    //分页显示
-			    $resultnum=count($resultarray);
-			    @$page=ceil($resultnum/$numPerPage);
-			    @$sr=($pageNum-1)*$numPerPage;
-			    $resultnow=mysqli_query($con,"select * from t_sktravel where travel is not null and dodate between '".$firstday."' and '".$lastday."'  limit ".$sr.",".$numPerPage );
-			    $resultnowarray=mysqli_fetch_all($resultnow,MYSQLI_ASSOC);
-			    
-			}else {
+			$xje=0.00;
+
+			$xye=0.00;
 			    $sql="";
-			    $startdate=$_POST["startDate"];
-			    $enddate=$_POST["endDate"]!=""?$_POST["endDate"]:date("Y-m-d",time());
-			    $sql.=" and dodate between '".$startdate."' and '".$enddate."'";
+			if(isset($_POST["search"])){
+			    
+			    if($_POST["startDate"]!=""){
+			        $startdate=$_POST["startDate"];
+			        $enddate=$_POST["endDate"]!=""?$_POST["endDate"]:date("Y-m-d",time());
+			        $sql.=" and dodate between '".$startdate."' and '".$enddate."'";
+			    }
 			    $sql.=$_POST["zts_id"]!=""?" and travel='".$_POST["zts_id"]."'":"";
 			    $sql.=$_POST["gdmonth"]!=""?" and gddate='".$_POST["gdmonth"]."'":"";
-			    $sql.=$_POST["dopeople"]!=""?" and dopeoplename like '%".$_POST["dopeople"]."%'":"";
-			    $sql.=$_POST["account"]!=""?" and accountname like '%".$_POST["account"]."%'":"";
 			    $sql.=$_POST["remark"]!=""?" and remark like '%".$_POST["remark"]."%'":"";
-			    $result=mysqli_query($con,"select * from t_sktravel where travel is not null  ".$sql );
-			    // echo "select * from t_groupmanage where 1=1 ".$sql.isset($_POST["zts_id"]);
-			    //echo $sql;
-			    $resultarray=mysqli_fetch_all($result,MYSQLI_ASSOC);
-			    //分页显示
-			    $resultnum=count($resultarray);
-			    @$page=ceil($resultnum/$numPerPage);
-			    @$sr=($pageNum-1)*$numPerPage;
-			    $resultnow=mysqli_query($con,"select * from t_sktravel where travel is not null  ".$sql." limit ".$sr.",".$numPerPage );
-			    $resultnowarray=mysqli_fetch_all($resultnow,MYSQLI_ASSOC);
+			    if($J->type($jur, "range")=="person"){
+			        $sql.=" and a.dopeople='".$_COOKIE["userid"]."'";
+			    }else{
+			        $sql.=$_POST["jd_id"]!=""?" and dopeople='".$_POST["jd_id"]."'":"";
+			    }
+			    if($J->type($jur, "range")=="department"){
+			        $sql.=" and b.dept='".$usermsg["deptid"]."'";
+			    }else if($J->type($jur, "range")=="company"){
+			        $sql.=" and b.hotel='".$usermsg["hotelid"]."'";
+			    }
+			    //$sql.=$_POST["groupnum"]!=""?" and teamNumber like '%".$_POST["groupnum"]."%'":"";
+			}else{
+			    $sql.=" and a.dodate between '".$firstday."' and '".$lastday."'";
+			    //权限范围
+			    if($J->type($jur, "range")=="person"){
+			        $sql.=" and a.dopeople='".$_COOKIE["userid"]."'";
+			    }else if($J->type($jur, "range")=="department"){
+			        $sql.=" and b.dept='".$usermsg["deptid"]."'";
+			    }else if($J->type($jur, "range")=="company"){
+			        $sql.=" and b.hotel='".$usermsg["hotelid"]."'";
+			    }
+			    //
 			}
-			
+			$table="t_sktravel as a right join t_user as b on a.dopeople=b.id ";
+			$data="*,a.id as id";
+			$where="travel is not null ".$sql." order by a.dodate desc";
+			$result=$db->tabledata($pageNum,$numPerPage,$table,$data,$where,"a.id");
+			//合计
+    			$data="sum(a.money) as money,sum(a.mhaving) as mhaving";
+    			$countall=$db->select($table, $data, $where)[0];
+    			$allmoney=$countall["money"];
+    			$allpayedmoney=$countall["mhaving"];
+    			
+			$resultnum=$result["amount"];
+			$resultnowarray=$result["result"];
+			$allpaytype=$db->select("t_baseconfig","*","1=1");
 			for($a=0;$a<count($resultnowarray);$a++){
 			    $xje+=$resultnowarray[$a]['money'];
-			    $xzje+=$resultnowarray[$a]['money']-$resultnowarray[$a]['mhaving'];
 			    $xye+=$resultnowarray[$a]['mhaving'];
+			    
+			    $jd=$base->getdata("user", $resultnowarray[$a]['dopeople']);
+			    $zts=$base->getdata("travel", $resultnowarray[$a]['travel']);
 			?>
 			  <tr  >
 			<td ><?php echo ($a+1);?>
 			</td><td ><?php 
-			
-			$ztsid=$resultnowarray[$a]['travel'];
-			$ztssql=mysqli_query($con, "select travel_name from t_travel where id=".$ztsid);
-			$zts=mysqli_fetch_array($ztssql);
 			echo $zts['travel_name'];
 			?>
             </td><td ><?php echo $resultnowarray[$a]['dodate'];?>
             </td><td ><?php echo $resultnowarray[$a]['gddate'];?>月
             </td><td ><?php 
-
-            $getpaysql=mysqli_query($con, "select * from t_baseconfig where basenote=5 and id=".$resultnowarray[$a]['paytype']);
-            @$getpay=mysqli_fetch_array($getpaysql,MYSQLI_ASSOC);
-            echo @$getpay["basetype"];
+            foreach ($allpaytype as $p){
+                if($p["id"]==$resultnowarray[$a]['paytype']){
+                    echo $p["basetype"];
+                }
+            }
             ?>
             </td><td ><?php echo $resultnowarray[$a]['invoice'];?>
             </td><td ><?php echo $resultnowarray[$a]['money'];?>
             </td><td ><?php echo $resultnowarray[$a]['money']-$resultnowarray[$a]['mhaving'];?>
             </td><td ><?php echo $resultnowarray[$a]['mhaving'];?>
             </td><td ><?php 
-            $jdid=$resultnowarray[$a]['dopeople'];
-            $jdsql=mysqli_query($con, "select username from t_user where id=".$jdid);
-            $jd=mysqli_fetch_array($jdsql);
             echo $jd["username"];
             ?>
             </td><td  style="word-break:break-all; word-wrap:break-all; width:300px;"><?php echo $resultnowarray[$a]['remark'];?>
@@ -223,7 +185,8 @@ function shanchu(){
 }
  
     ?>
-    <tr >
+    	
+   			 <tr class="tfoot">
 				<th align="center">小计</th>
 				<th align="center"></th>
 				<th align="center"></th>
@@ -231,45 +194,29 @@ function shanchu(){
 				<th align="center"></th>
 				<th align="center"></th>
 				<th align="center"><?php echo $xje;?></th>
-				<th align="center"><?php echo $xzje;?></th>
+				<th align="center"><?php echo $xje-$xye;?></th>
 				<th align="center"><?php echo $xye;?></th>
 				<th align="center"></th>
 				<th align="center"></th>
 				<th align="center"></th>
 			</tr>
-			 <tr>
+			 <tr class="tfoot">
 				<th align="center">总计</th>
 				<th align="center"></th>
 				<th align="center"></th>
 				<th align="center"></th> 
 				<th align="center"></th>
 				<th align="center"></th>
-			<th align="center"><?php echo $zje;?></th>
-				<th align="center"><?php echo $zzje;?></th>
-				<th align="center"><?php echo $zye;?></th>
+				<th align="center"><?php echo $allmoney;?></th>
+				<th align="center"><?php echo $allmoney-$allpayedmoney;?></th>
+				<th align="center"><?php echo $allpayedmoney;?></th>
 				<th align="center"></th>
 				<th align="center"></th>
 				<th align="center"></th>
 			</tr>
 		</tbody>
+    	
 	</table>
 	
-	<div class="panelBar">
-		<div class="pages">
-			<span>显示</span>
-			<select class="combox" name="numPerPage" onchange="navTabPageBreak({numPerPage:this.value})">
-		
-				<option value="20" <?php if($numPerPage==20){echo "selected='selected'";}?>>20</option>
-				<option value="50"<?php if($numPerPage==50){echo "selected='selected'";}?>>50</option>
-				<option value="100"<?php if($numPerPage==100){echo "selected='selected'";}?>>100</option>
-				<option value="150"<?php if($numPerPage==150){echo "selected='selected'";}?>>150</option>
-				<option value="200"<?php if($numPerPage==200){echo "selected='selected'";}?>>200</option>
-				<option value="250"<?php if($numPerPage==250){echo "selected='selected'";}?>>250</option>
-			</select>
-			<span>条，共<?php echo count($resultarray); ?>条</span>
-		</div>
-
-		<div class="pagination" targetType="navTab" totalCount="<?php echo count($resultarray); ?>" numPerPage="<?php echo $numPerPage;?>" pageNumShown="10" currentPage="<?php echo $pageNum;?>"></div>
-
-	</div>
+<?php require R.'temp/table/default_footer.php';?>
 </div>

@@ -21,3 +21,6 @@ $usermsg=$base->data(md5($_COOKIE["username"]))[0];
 $result=$db->tabledata($pageNum,$numPerPage," ","","","a.id");
 $resultnum=$result["amount"];
 $resultnowarray=$result["result"];
+?>
+<?php require R.'temp/search/zts.php';?>
+<?php require R.'temp/search/user.php';?>

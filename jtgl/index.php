@@ -37,35 +37,24 @@ if(isset($_POST["numPerPage"])){
 				</td>
 				<td >
 					组团社:
-				<input type="hidden" name="zts.id" value="<?php
-					echo  isset($_POST["zts_id"])?$_POST["zts_id"]:'';?>"/>
-				<input type="text" class="getdata" data-type="zts" name="zts.zts" value="<?php
-					echo  isset($_POST["zts_zts"])?$_POST["zts_zts"]:'';?>" suggestFields="zts"   lookupGroup="zts" />
-				<a class="btnLook default" style="float: right;"  lookupGroup="zts">选择组团社</a>
+				<?php require R.'temp/search/zts.php';?>
 				</td>
 				<td >
 					计调:
-					<input type="hidden" name="jd.id" value="<?php
-					echo  isset($_POST["jd_id"])?$_POST["jd_id"]:'';?>"/>
-				<input type="text" class="getdata" data-type="jd" name="jd.jd" value="<?php
-					echo  isset($_POST["jd_jd"])?$_POST["jd_jd"]:'';?>" suggestFields="jd"  lookupGroup="jd" />
-				<a class="btnLook default" style="float: right;"  lookupGroup="jd">选择用户</a>
+				<?php require R.'temp/search/user.php';?>
 				</td>
 				<td >
 					团号:
-					<input name="groupnum"  type="text" size="30" value="<?php
+					<input name="groupnum"  type="text"  class="textInput" size="30" value="<?php
 					echo  isset($_POST["groupnum"])?$_POST["groupnum"]:'';?>" />
 				</td>
+				<td><div class="buttonActive"><div class="buttonContent"><button type="submit">搜索</button></div></div></td>
 			</tr>
 		</table>
 		<input name="search"  type="hidden" size="30" value="yes"/>
 		<input type="hidden" name="pageNum" value="1" />
 	<input type="hidden" name="numPerPage" value="<?php echo $numPerPage;?>" />
-		<div class="subBar">
-			<ul>
-				<li><div class="buttonActive"><div class="buttonContent"><button type="submit">搜索</button></div></div></li>
-			</ul>
-		</div>
+		
 	</div>
 	</form>
 </div>
@@ -77,7 +66,7 @@ if(isset($_POST["numPerPage"])){
 		</ul>
 	</div>
 
-	<table class="table" width="100%" layoutH="158" style="word-break:break-all; word-wrap:break-all;">
+	<table class="table" width="100%" layoutH="128" style="word-break:break-all; word-wrap:break-all;">
 		<thead>
 			<tr>
 				<th align="center">序号</th>
@@ -106,12 +95,13 @@ if(isset($_POST["numPerPage"])){
 			     $sql.=$_POST["zts_id"]!=""?" and groupName='".$_POST["zts_id"]."'":"";
 			     if($J->type($jur, "range")=="person"){
 			         $sql.=" and a.jd='".$_COOKIE["userid"]."'";
-			     }else if($J->type($jur, "range")=="department"){
+			     }else{
+			         $sql.=$_POST["jd_id"]!=""?" and jd='".$_POST["jd_id"]."'":"";
+			     }
+			      if($J->type($jur, "range")=="department"){
 			         $sql.=" and b.dept='".$usermsg["deptid"]."'";
 			     }else if($J->type($jur, "range")=="company"){
 			         $sql.=" and b.hotel='".$usermsg["hotelid"]."'";
-			     }else{
-			         $sql.=$_POST["jd_id"]!=""?" and jd='".$_POST["jd_id"]."'":"";
 			     }
 			     $sql.=$_POST["groupnum"]!=""?" and teamNumber like '%".$_POST["groupnum"]."%'":"";
 			 }else{

@@ -1,10 +1,10 @@
 <?php
 require "hzb/config.php";
 
-setcookie("user", "", time()-3600);
-setcookie("usertype", "", time()-3600);
-setcookie("hotelcode", "", time()-3600);
-setcookie("userid", "", time()-3600);
+setcookie("username", "", time()-3600,"/");
+setcookie("usertype", "", time()-3600,"/");
+setcookie("hotelcode", "", time()-3600,"/");
+setcookie("userid", "", time()-3600,"/");
 
 
 ?>

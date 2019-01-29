@@ -8,7 +8,7 @@ require R.'hzb/inc/load.php';
 $(function(){
 
 	$(".getothercus").change(function(){
-		$(".planremark").val($("#krxx").val());
+		$(this).parent().parent().parent().parent().parent().parent().find(".planremark").val($(this).parent().parent().parent().parent().parent().parent().parent().parent().parent().parent().find("#krxx").val());
 		
 		});
 	$(".countother").change(function(){
